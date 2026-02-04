@@ -26,3 +26,10 @@ python create_tables.py
 create a .env file and do: `SQLALCHEMY_DATABASE_URI='postgresql://postgres:{password}@localhost:5432/climbing_comp'`, where password is the password stored in 1password.
 
 also do `JWT_SECRET_KEY=my-dev-secret-key-change-in-prod`, we will change this later, but just for testing purposes I will leave this as it is.
+
+testing backend:
+
+```
+cd backend
+python main.py
+```
