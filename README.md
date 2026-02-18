@@ -15,7 +15,7 @@ if databases are not created, do the following:
 
 ```
 cd backend
-python create_tables.py
+python -m table_scripts.create_tables
 ```
 
 create a .env file and do: `SQLALCHEMY_DATABASE_URI='postgresql://postgres:{password}@localhost:5432/climbing_comp'`, where password is the password stored in 1password.
