@@ -34,8 +34,6 @@ class Competition(db.Model):
     name = db.Column(db.String(255), nullable=False)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
-    # should be upcoming / active / completed 
-    status = db.Column(db.String(20), default='active')
     
     climbs = db.relationship('Climb', backref='competition', lazy=True)
     registrations = db.relationship('Registration', backref='competition', lazy=True)

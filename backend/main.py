@@ -37,7 +37,6 @@ def get_comps():
         'name': comp.name,
         'start_time': comp.start_time.isoformat(),
         'end_time': comp.end_time.isoformat(),
-        'status': comp.status
     } for comp in comps]), 200
 
 @app.route("/api/competitions/<int:comp_id>", methods=["GET"])
@@ -54,7 +53,6 @@ def get_comp_details(comp_id):
         'name': comp.name,
         'start_time': comp.start_time.isoformat(),
         'end_time': comp.end_time.isoformat(),
-        'status': comp.status,
         'climbs': [{
             'id': climb.id,
             'name': climb.name,
@@ -79,7 +77,6 @@ def view_registered_comps():
         'name': reg.competition.name,
         'start_time': reg.competition.start_time.isoformat(),
         'end_time': reg.competition.end_time.isoformat(),
-        'status': reg.competition.status
     } for reg in registrations]), 200
 
 

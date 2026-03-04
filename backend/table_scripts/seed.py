@@ -16,14 +16,12 @@ with app.app_context():
         name="Spring Bouldering Open",
         start_time=datetime(2026, 4, 1, 9, 0),
         end_time=datetime(2026, 4, 1, 17, 0),
-        status="active"
     )
     comp2 = Competition(
         gym_id=gym.id,
         name="Spring Lead Qualifier",
         start_time=datetime(2026, 4, 1, 13, 0),  # overlaps with comp1
         end_time=datetime(2026, 4, 1, 20, 0),
-        status="active"
     )
 
     db.session.add_all([comp1, comp2])
