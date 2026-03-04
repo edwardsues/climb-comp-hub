@@ -11,11 +11,12 @@ cd backend
 pip install -r requirements.txt
 ```
 
-if databases are not created, do the following:
+if databases are not created, do the following and seed with dummy values:
 
 ```
 cd backend
 python -m table_scripts.create_tables
+python -m table_scripts.seed
 ```
 
 create a .env file and do: `SQLALCHEMY_DATABASE_URI='postgresql://postgres:{password}@localhost:5432/climbing_comp'`, where password is the password stored in 1password.
@@ -32,7 +33,7 @@ python main.py
 testing frontend:
 
 ```
-cd backend
+cd frontend
 npm run dev
 ```
 
