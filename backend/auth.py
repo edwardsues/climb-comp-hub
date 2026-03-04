@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import request, jsonify
+from flask import request, jsonify, g
 import asyncio
 import os
 from auth0_api_python.errors import BaseAuthError
@@ -26,7 +26,7 @@ def require_auth(f):
         
         try:
             claims = asyncio.run(api_client.verify_access_token(token))
-            g.user_claims = claims
+            g.current_user = claims
             return f(*args, **kwargs)
         except BaseAuthError as e:
             return (
@@ -39,15 +39,14 @@ def require_auth(f):
 
 def get_or_create_user():
     """Get user from Auth0 token, create if this is their first login. To be used whenever calling an endpoint that interacts with users."""
-    auth0_id = request.current_user['sub']
+    auth0_id = g.current_user['sub']
     user = User.query.filter_by(auth0_id=auth0_id).first()
 
-    # make a new user if one doesn't exist
     if not user:
         user = User(
             auth0_id=auth0_id,
-            email=request.current_user.get('email'),
-            name=request.current_user.get('name'),
+            email=g.current_user.get('email'),
+            name=g.current_user.get('name'),
             role='climber'
         )
         db.session.add(user)
