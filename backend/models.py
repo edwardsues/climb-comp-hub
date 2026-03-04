@@ -17,8 +17,8 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     auth0_id = db.Column(db.String(255), unique=True, nullable=False)
-    email = db.Column(db.String(255), unique=True, nullable=False)
-    name = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), unique=True, nullable=True)
+    name = db.Column(db.String(255), nullable=True)
     dob = db.Column(db.Date)
     role = db.Column(db.String(20), default='climber')
     gym_id = db.Column(db.Integer, db.ForeignKey('gyms.id'))
@@ -32,7 +32,9 @@ class Competition(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     gym_id = db.Column(db.Integer, db.ForeignKey('gyms.id'), nullable=False)
     name = db.Column(db.String(255), nullable=False)
-    date = db.Column(db.Date, nullable=False)
+    start_time = db.Column(db.DateTime, nullable=False)
+    end_time = db.Column(db.DateTime, nullable=False)
+    # should be upcoming / active / completed 
     status = db.Column(db.String(20), default='active')
     
     climbs = db.relationship('Climb', backref='competition', lazy=True)
