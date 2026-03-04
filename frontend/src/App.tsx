@@ -2,9 +2,19 @@ import { useAuth0 } from "@auth0/auth0-react";
 import LoginButton from "./auth/LoginButton";
 import LogoutButton from "./auth/LogoutButton";
 import Profile from "./auth/Profile";
+import { useEffect } from "react";
 
 function App() {
-  const { isAuthenticated, isLoading, error } = useAuth0();
+  const { isAuthenticated, isLoading, error, getAccessTokenSilently } =
+    useAuth0();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      getAccessTokenSilently().then((token) =>
+        localStorage.setItem("access_token", token),
+      );
+    }
+  }, [isAuthenticated]);
 
   if (isLoading) {
     return (
