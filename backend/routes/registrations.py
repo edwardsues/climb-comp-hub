@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify
 
 from auth import get_or_create_user, require_auth
 from models import Competition, Registration
+from models import db
 
 
 registrations_bp = Blueprint("registrations", __name__)

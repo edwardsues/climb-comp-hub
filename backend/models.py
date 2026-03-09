@@ -73,6 +73,7 @@ class Attempt(db.Model):
     completed = db.Column(db.Boolean, default=False)
     attempts_to_top = db.Column(db.Integer)
     video_url = db.Column(db.String(500))
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
     
     __table_args__ = (db.UniqueConstraint('user_id', 'climb_id'),)

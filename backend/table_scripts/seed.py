@@ -3,7 +3,7 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from main import app, db
-from models import Gym, Competition
+from models import Gym, Competition, Climb
 from datetime import datetime
 
 with app.app_context():
@@ -25,7 +25,15 @@ with app.app_context():
     )
 
     db.session.add_all([comp1, comp2])
+    db.session.flush()
+
+    climb1 = Climb(competition_id=comp1.id, grade="V3", points=100)
+    climb2 = Climb(competition_id=comp1.id, grade="V6", points=200)
+    db.session.add_all([climb1, climb2])
+
     db.session.commit()
     print(f"Created gym: {gym.name} (id={gym.id})")
-    print(f"Created comp: {comp1.name} (id={comp1.id}) {comp1.start_time} - {comp1.end_time}")
-    print(f"Created comp: {comp2.name} (id={comp2.id}) {comp2.start_time} - {comp2.end_time}")
+    print(f"Created comp: {comp1.name} (id={comp1.id})")
+    print(f"Created comp: {comp2.name} (id={comp2.id})")
+    print(f"Created climb: {climb1.name} grade={climb1.grade} (id={climb1.id})")
+    print(f"Created climb: {climb2.name} grade={climb2.grade} (id={climb2.id})")

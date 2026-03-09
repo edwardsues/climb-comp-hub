@@ -38,4 +38,4 @@ def update_me():
         "email": user.email,
         "name": user.name,
         "dob": user.dob.isoformat() if user.dob else None,
-    })
+    }), 200
