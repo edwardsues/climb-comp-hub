@@ -37,6 +37,18 @@ def require_auth(f):
     
     return decorated_function
 
+def require_permission(permission):
+    """Decorator for a specific permission"""
+    def decorator(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            permissions = g.current_user.get("permissions", [])
+            if permission not in permissions:
+                return jsonify({"error": "Forbidden"}), 403
+            return f(*args, **kwargs)
+        return wrapper
+    return decorator
+
 def get_or_create_user():
     """Get user from Auth0 token, create if this is their first login. To be used whenever calling an endpoint that interacts with users."""
     auth0_id = g.current_user['sub']
