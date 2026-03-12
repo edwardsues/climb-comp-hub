@@ -34,9 +34,10 @@ class Competition(db.Model):
     name = db.Column(db.String(255), nullable=False)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
+    # TODO: add max participants field
     
-    climbs = db.relationship('Climb', backref='competition', lazy=True)
-    registrations = db.relationship('Registration', backref='competition', lazy=True)
+    climbs = db.relationship('Climb', backref='competition', lazy=True, cascade="all, delete-orphan")
+    registrations = db.relationship('Registration', backref='competition', lazy=True, cascade="all, delete-orphan")
 
 class Registration(db.Model):
     __tablename__ = 'registrations'
