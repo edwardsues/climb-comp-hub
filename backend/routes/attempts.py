@@ -14,9 +14,7 @@ def log_attempt():
     data = request.get_json()
 
     climb_id = data.get("climb_id")
-    print("climbid:", climb_id)
     climb = Climb.query.get_or_404(climb_id)
-    print("got climb")
 
     # check if the user is even registered for the competition
     this_reg = Registration.query.filter_by(
