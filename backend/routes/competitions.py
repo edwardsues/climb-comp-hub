@@ -8,6 +8,7 @@ competitions_bp = Blueprint("competitions", __name__, url_prefix="/api/competiti
 
 @competitions_bp.route("", methods=["GET"])
 def get_comps():
+    """Get all competitions"""
     comps = Competition.query.all()
     return jsonify([{
         'id': comp.id,
@@ -23,17 +24,21 @@ def get_comps():
 
 @competitions_bp.route("", methods=["POST"])
 @require_auth
-@require_permission("write:competitions")
+@require_permission("create:competitions")
 def create_comp():
     """Create a new competition"""
     user = get_or_create_user()
     data = request.get_json()
 
+    missing = [f for f in ["name", "start_time", "end_time"] if not data.get(f)]
+    if missing:
+        return jsonify({"error": f"Missing required fields: {', '.join(missing)}"}), 400
+
     comp = Competition(
-        gym_id = user.gym_id,
-        name = data.get("name"),
-        start_time = data.get("start_time"),
-        end_time = data.get("end_time"),
+        gym_id=user.gym_id,
+        name=data["name"],
+        start_time=data["start_time"],
+        end_time=data["end_time"],
     )
 
     db.session.add(comp)
@@ -49,6 +54,7 @@ def create_comp():
 
 @competitions_bp.route("/<int:comp_id>", methods=["GET"])
 def get_comp_details(comp_id):
+    """Get details for a specific competition"""
     comp = Competition.query.get_or_404(comp_id)
     climbs = Climb.query.filter_by(competition_id=comp_id).all()
 
@@ -75,6 +81,7 @@ def get_comp_details(comp_id):
 @require_auth
 @require_permission("update:competitions")
 def update_comp(comp_id):
+    """Update a specific competition"""
     user = get_or_create_user()
     comp = Competition.query.get_or_404(comp_id)
 
@@ -115,7 +122,7 @@ def delete_comp(comp_id):
 
 @competitions_bp.route("/<int:comp_id>/attempts", methods=["GET"])
 @require_auth
-def get_attempts(comp_id):
+def get_attempts(comp_id): 
     user = get_or_create_user()
     comp = Competition.query.get_or_404(comp_id)
 

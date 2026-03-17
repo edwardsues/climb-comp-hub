@@ -20,6 +20,7 @@ class User(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=True)
     name = db.Column(db.String(255), nullable=True)
     dob = db.Column(db.Date)
+    # TODO: remove role, can just be checked with access string 
     role = db.Column(db.String(20), default='climber')
     gym_id = db.Column(db.Integer, db.ForeignKey('gyms.id'))
 
