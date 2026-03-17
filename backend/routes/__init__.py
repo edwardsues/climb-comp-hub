@@ -1,4 +1,5 @@
 from .attempts import attempts_bp
+from .climbs import climbs_bp
 from .competitions import competitions_bp
 from .gyms import gyms_bp
 from .registrations import registrations_bp
