@@ -3,7 +3,7 @@ from flask_cors import CORS
 from config import Config
 from models import db
 
-from routes import attempts_bp, competitions_bp, gyms_bp, registrations_bp, users_bp
+from routes import attempts_bp, climbs_bp, competitions_bp, gyms_bp, registrations_bp, users_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -13,6 +13,7 @@ CORS(app)
 
 # routes:
 app.register_blueprint(attempts_bp)
+app.register_blueprint(climbs_bp)
 app.register_blueprint(competitions_bp)
 app.register_blueprint(gyms_bp)
 app.register_blueprint(registrations_bp)
