@@ -19,6 +19,7 @@ def get_me():
         "email": user.email,
         "name": user.name,
         "dob": user.dob.isoformat() if user.dob else None,
+        "gym_id": user.gym_id 
     })
 
 @users_bp.route("/api/users/me", methods=["PATCH"])

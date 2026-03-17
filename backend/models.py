@@ -20,6 +20,7 @@ class User(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=True)
     name = db.Column(db.String(255), nullable=True)
     dob = db.Column(db.Date)
+    # TODO: remove role, can just be checked with access string 
     role = db.Column(db.String(20), default='climber')
     gym_id = db.Column(db.Integer, db.ForeignKey('gyms.id'))
 
@@ -34,9 +35,10 @@ class Competition(db.Model):
     name = db.Column(db.String(255), nullable=False)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
+    # TODO: add max participants field
     
-    climbs = db.relationship('Climb', backref='competition', lazy=True)
-    registrations = db.relationship('Registration', backref='competition', lazy=True)
+    climbs = db.relationship('Climb', backref='competition', lazy=True, cascade="all, delete-orphan")
+    registrations = db.relationship('Registration', backref='competition', lazy=True, cascade="all, delete-orphan")
 
 class Registration(db.Model):
     __tablename__ = 'registrations'
