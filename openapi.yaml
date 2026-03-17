@@ -1,0 +1,460 @@
+openapi: 3.0.3
+info:
+  title: Climb Comp Hub API
+  description: REST API for managing climbing competitions, registrations, and attempts.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:5000
+    description: Local development
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Gym:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        address: { type: string }
+
+    Competition:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        start_time: { type: string, format: date-time }
+        end_time: { type: string, format: date-time }
+        gym:
+          $ref: '#/components/schemas/Gym'
+
+    Climb:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        grade: { type: string, example: "V5" }
+        points: { type: integer }
+        image_url: { type: string, nullable: true }
+
+    Attempt:
+      type: object
+      properties:
+        id: { type: integer }
+        climb_id: { type: integer }
+        completed: { type: boolean }
+        attempts_to_top: { type: integer, nullable: true }
+
+    User:
+      type: object
+      properties:
+        id: { type: integer }
+        email: { type: string }
+        name: { type: string }
+        dob: { type: string, format: date, nullable: true }
+        gym_id: { type: integer, nullable: true }
+
+    Error:
+      type: object
+      properties:
+        error: { type: string }
+
+paths:
+
+  # ─── Gyms ────────────────────────────────────────────────────────────────────
+
+  /api/gyms:
+    get:
+      summary: List all gyms
+      tags: [Gyms]
+      responses:
+        '200':
+          description: List of gyms
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Gym' }
+
+  /api/gyms/{gym_id}:
+    get:
+      summary: Get a gym with its competitions
+      tags: [Gyms]
+      parameters:
+        - name: gym_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Gym details including competitions
+        '404':
+          description: Gym not found
+
+  # ─── Competitions ─────────────────────────────────────────────────────────────
+
+  /api/competitions:
+    get:
+      summary: List all competitions
+      tags: [Competitions]
+      responses:
+        '200':
+          description: List of competitions
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Competition' }
+
+    post:
+      summary: Create a competition
+      tags: [Competitions]
+      security:
+        - bearerAuth: []
+      description: Requires `create:competitions` permission. Competition is created under the gym of the authenticated user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, start_time, end_time]
+              properties:
+                name: { type: string }
+                start_time: { type: string, format: date-time }
+                end_time: { type: string, format: date-time }
+      responses:
+        '200':
+          description: Competition created
+        '400':
+          description: Missing required fields
+        '403':
+          description: Forbidden
+
+  /api/competitions/{comp_id}:
+    get:
+      summary: Get competition details with climbs
+      tags: [Competitions]
+      parameters:
+        - name: comp_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Competition details including climb list
+        '404':
+          description: Competition not found
+
+    patch:
+      summary: Update a competition
+      tags: [Competitions]
+      security:
+        - bearerAuth: []
+      description: Requires `update:competitions` permission. Only the gym owner can update their competition.
+      parameters:
+        - name: comp_id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                start_time: { type: string, format: date-time }
+                end_time: { type: string, format: date-time }
+      responses:
+        '200':
+          description: Competition updated
+        '403':
+          description: Forbidden
+        '404':
+          description: Competition not found
+
+    delete:
+      summary: Delete a competition
+      tags: [Competitions]
+      security:
+        - bearerAuth: []
+      description: Requires `delete:competitions` permission. Cascades to climbs and registrations.
+      parameters:
+        - name: comp_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Competition deleted
+        '403':
+          description: Forbidden
+        '404':
+          description: Competition not found
+
+  /api/competitions/{comp_id}/register:
+    post:
+      summary: Register for a competition
+      tags: [Competitions]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: comp_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '201':
+          description: Successfully registered
+        '400':
+          description: Already registered for an overlapping competition
+        '409':
+          description: Already registered for this competition
+
+  /api/competitions/{comp_id}/attempts:
+    get:
+      summary: Get current user's attempts for a competition
+      tags: [Competitions]
+      security:
+        - bearerAuth: []
+      description: User must be registered for the competition.
+      parameters:
+        - name: comp_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: List of attempts
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Attempt' }
+        '403':
+          description: Not registered for this competition
+
+  # ─── Climbs ───────────────────────────────────────────────────────────────────
+
+  /api/competitions/{comp_id}/climbs:
+    get:
+      summary: List climbs for a competition
+      tags: [Climbs]
+      parameters:
+        - name: comp_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: List of climbs
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Climb' }
+
+    post:
+      summary: Add a climb to a competition
+      tags: [Climbs]
+      security:
+        - bearerAuth: []
+      description: Requires `create:climbs` permission. Only the gym owner can add climbs.
+      parameters:
+        - name: comp_id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [grade, points]
+              properties:
+                grade: { type: string, example: "V5" }
+                points: { type: integer }
+                name: { type: string }
+      responses:
+        '201':
+          description: Climb created
+        '400':
+          description: Missing required fields
+        '403':
+          description: Forbidden
+
+  /api/competitions/{comp_id}/climbs/{climb_id}:
+    patch:
+      summary: Update a climb
+      tags: [Climbs]
+      security:
+        - bearerAuth: []
+      description: Requires `update:climbs` permission.
+      parameters:
+        - name: comp_id
+          in: path
+          required: true
+          schema: { type: integer }
+        - name: climb_id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                grade: { type: string }
+                points: { type: integer }
+      responses:
+        '200':
+          description: Climb updated
+        '403':
+          description: Forbidden
+        '404':
+          description: Climb not found
+
+    delete:
+      summary: Delete a climb
+      tags: [Climbs]
+      security:
+        - bearerAuth: []
+      description: Requires `delete:climbs` permission.
+      parameters:
+        - name: comp_id
+          in: path
+          required: true
+          schema: { type: integer }
+        - name: climb_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Climb deleted
+        '403':
+          description: Forbidden
+        '404':
+          description: Climb not found
+
+  # ─── Attempts ─────────────────────────────────────────────────────────────────
+
+  /api/attempts:
+    post:
+      summary: Log a climb attempt
+      tags: [Attempts]
+      security:
+        - bearerAuth: []
+      description: User must be registered for the competition the climb belongs to.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [climb_id]
+              properties:
+                climb_id: { type: integer }
+                completed: { type: boolean, default: false }
+                attempts_to_top: { type: integer, nullable: true }
+      responses:
+        '201':
+          description: Attempt logged
+        '403':
+          description: Not registered for this competition
+        '404':
+          description: Climb not found
+        '409':
+          description: Attempt already logged for this climb
+
+  /api/attempts/{attempt_id}:
+    patch:
+      summary: Update an attempt
+      tags: [Attempts]
+      security:
+        - bearerAuth: []
+      description: Users can only update their own attempts.
+      parameters:
+        - name: attempt_id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                completed: { type: boolean }
+                attempts_to_top: { type: integer }
+      responses:
+        '200':
+          description: Attempt updated
+        '403':
+          description: Not your attempt
+        '404':
+          description: Attempt not found
+
+  # ─── Registrations ────────────────────────────────────────────────────────────
+
+  /api/registrations:
+    get:
+      summary: List competitions the current user is registered for
+      tags: [Registrations]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of competitions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id: { type: integer }
+                    name: { type: string }
+                    start_time: { type: string, format: date-time }
+                    end_time: { type: string, format: date-time }
+
+  # ─── Users ────────────────────────────────────────────────────────────────────
+
+  /api/users/me:
+    get:
+      summary: Get current user profile
+      tags: [Users]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/User' }
+
+    patch:
+      summary: Update current user profile
+      tags: [Users]
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                dob: { type: string, format: date, example: "1999-04-20" }
+      responses:
+        '200':
+          description: Updated user profile
