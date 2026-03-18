@@ -1,20 +1,33 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css"; // Importing the main CSS file
-import App from "./App.tsx";
+import "./index.css";
 import { Auth0Provider } from "@auth0/auth0-react";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
+
+const router = createRouter({
+    routeTree,
+    defaultPreload: "intent",
+    scrollRestoration: true,
+});
+
+declare module "@tanstack/react-router" {
+    interface Register {
+        router: typeof router;
+    }
+}
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <Auth0Provider
-      domain={import.meta.env.VITE_AUTH0_DOMAIN}
-      clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
-      authorizationParams={{
-        redirect_uri: window.location.origin,
-        audience: import.meta.env.VITE_AUTH0_AUDIENCE,
-      }}
-    >
-      <App />
-    </Auth0Provider>
-  </StrictMode>,
+    <StrictMode>
+        <Auth0Provider
+            domain={import.meta.env.VITE_AUTH0_DOMAIN}
+            clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
+            authorizationParams={{
+                redirect_uri: window.location.origin,
+                audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+            }}
+        >
+            <RouterProvider router={router} />
+        </Auth0Provider>
+    </StrictMode>,
 );
