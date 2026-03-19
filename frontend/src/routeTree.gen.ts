@@ -8,106 +8,124 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as MyCompetitionsRouteImport } from './routes/my-competitions'
-import { Route as CompetitionsRouteImport } from './routes/competitions'
-import { Route as CalendarRouteImport } from './routes/calendar'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as MyGymRouteImport } from "./routes/my-gym";
+import { Route as MyCompetitionsRouteImport } from "./routes/my-competitions";
+import { Route as CompetitionsRouteImport } from "./routes/competitions";
+import { Route as CalendarRouteImport } from "./routes/calendar";
+import { Route as IndexRouteImport } from "./routes/index";
 
+const MyGymRoute = MyGymRouteImport.update({
+    id: "/my-gym",
+    path: "/my-gym",
+    getParentRoute: () => rootRouteImport,
+} as any);
 const MyCompetitionsRoute = MyCompetitionsRouteImport.update({
-  id: '/my-competitions',
-  path: '/my-competitions',
-  getParentRoute: () => rootRouteImport,
-} as any)
+    id: "/my-competitions",
+    path: "/my-competitions",
+    getParentRoute: () => rootRouteImport,
+} as any);
 const CompetitionsRoute = CompetitionsRouteImport.update({
-  id: '/competitions',
-  path: '/competitions',
-  getParentRoute: () => rootRouteImport,
-} as any)
+    id: "/competitions",
+    path: "/competitions",
+    getParentRoute: () => rootRouteImport,
+} as any);
 const CalendarRoute = CalendarRouteImport.update({
-  id: '/calendar',
-  path: '/calendar',
-  getParentRoute: () => rootRouteImport,
-} as any)
+    id: "/calendar",
+    path: "/calendar",
+    getParentRoute: () => rootRouteImport,
+} as any);
 const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+    id: "/",
+    path: "/",
+    getParentRoute: () => rootRouteImport,
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/calendar': typeof CalendarRoute
-  '/competitions': typeof CompetitionsRoute
-  '/my-competitions': typeof MyCompetitionsRoute
+    "/": typeof IndexRoute;
+    "/calendar": typeof CalendarRoute;
+    "/competitions": typeof CompetitionsRoute;
+    "/my-competitions": typeof MyCompetitionsRoute;
+    "/my-gym": typeof MyGymRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/calendar': typeof CalendarRoute
-  '/competitions': typeof CompetitionsRoute
-  '/my-competitions': typeof MyCompetitionsRoute
+    "/": typeof IndexRoute;
+    "/calendar": typeof CalendarRoute;
+    "/competitions": typeof CompetitionsRoute;
+    "/my-competitions": typeof MyCompetitionsRoute;
+    "/my-gym": typeof MyGymRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/calendar': typeof CalendarRoute
-  '/competitions': typeof CompetitionsRoute
-  '/my-competitions': typeof MyCompetitionsRoute
+    __root__: typeof rootRouteImport;
+    "/": typeof IndexRoute;
+    "/calendar": typeof CalendarRoute;
+    "/competitions": typeof CompetitionsRoute;
+    "/my-competitions": typeof MyCompetitionsRoute;
+    "/my-gym": typeof MyGymRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/calendar' | '/competitions' | '/my-competitions'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/calendar' | '/competitions' | '/my-competitions'
-  id: '__root__' | '/' | '/calendar' | '/competitions' | '/my-competitions'
-  fileRoutesById: FileRoutesById
+    fileRoutesByFullPath: FileRoutesByFullPath;
+    fullPaths: "/" | "/calendar" | "/competitions" | "/my-competitions" | "/my-gym";
+    fileRoutesByTo: FileRoutesByTo;
+    to: "/" | "/calendar" | "/competitions" | "/my-competitions" | "/my-gym";
+    id: "__root__" | "/" | "/calendar" | "/competitions" | "/my-competitions" | "/my-gym";
+    fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  CalendarRoute: typeof CalendarRoute
-  CompetitionsRoute: typeof CompetitionsRoute
-  MyCompetitionsRoute: typeof MyCompetitionsRoute
+    IndexRoute: typeof IndexRoute;
+    CalendarRoute: typeof CalendarRoute;
+    CompetitionsRoute: typeof CompetitionsRoute;
+    MyCompetitionsRoute: typeof MyCompetitionsRoute;
+    MyGymRoute: typeof MyGymRoute;
 }
 
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/my-competitions': {
-      id: '/my-competitions'
-      path: '/my-competitions'
-      fullPath: '/my-competitions'
-      preLoaderRoute: typeof MyCompetitionsRouteImport
-      parentRoute: typeof rootRouteImport
+declare module "@tanstack/react-router" {
+    interface FileRoutesByPath {
+        "/my-gym": {
+            id: "/my-gym";
+            path: "/my-gym";
+            fullPath: "/my-gym";
+            preLoaderRoute: typeof MyGymRouteImport;
+            parentRoute: typeof rootRouteImport;
+        };
+        "/my-competitions": {
+            id: "/my-competitions";
+            path: "/my-competitions";
+            fullPath: "/my-competitions";
+            preLoaderRoute: typeof MyCompetitionsRouteImport;
+            parentRoute: typeof rootRouteImport;
+        };
+        "/competitions": {
+            id: "/competitions";
+            path: "/competitions";
+            fullPath: "/competitions";
+            preLoaderRoute: typeof CompetitionsRouteImport;
+            parentRoute: typeof rootRouteImport;
+        };
+        "/calendar": {
+            id: "/calendar";
+            path: "/calendar";
+            fullPath: "/calendar";
+            preLoaderRoute: typeof CalendarRouteImport;
+            parentRoute: typeof rootRouteImport;
+        };
+        "/": {
+            id: "/";
+            path: "/";
+            fullPath: "/";
+            preLoaderRoute: typeof IndexRouteImport;
+            parentRoute: typeof rootRouteImport;
+        };
     }
-    '/competitions': {
-      id: '/competitions'
-      path: '/competitions'
-      fullPath: '/competitions'
-      preLoaderRoute: typeof CompetitionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/calendar': {
-      id: '/calendar'
-      path: '/calendar'
-      fullPath: '/calendar'
-      preLoaderRoute: typeof CalendarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-  }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  CalendarRoute: CalendarRoute,
-  CompetitionsRoute: CompetitionsRoute,
-  MyCompetitionsRoute: MyCompetitionsRoute,
-}
+    IndexRoute: IndexRoute,
+    CalendarRoute: CalendarRoute,
+    CompetitionsRoute: CompetitionsRoute,
+    MyCompetitionsRoute: MyCompetitionsRoute,
+    MyGymRoute: MyGymRoute,
+};
 export const routeTree = rootRouteImport
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+    ._addFileChildren(rootRouteChildren)
+    ._addFileTypes<FileRouteTypes>();

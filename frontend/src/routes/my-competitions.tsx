@@ -6,7 +6,9 @@ export const Route = createFileRoute("/my-competitions")({
 });
 
 function MyCompetitionsComponent() {
-    const { isAuthenticated, loginWithRedirect } = useAuth0();
+    const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+
+    if (isLoading) return null;
 
     if (!isAuthenticated) {
         return (
