@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as MyGymRouteImport } from './routes/my-gym'
 import { Route as MyCompetitionsRouteImport } from './routes/my-competitions'
 import { Route as CompetitionsRouteImport } from './routes/competitions'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as IndexRouteImport } from './routes/index'
 
+const MyGymRoute = MyGymRouteImport.update({
+  id: '/my-gym',
+  path: '/my-gym',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MyCompetitionsRoute = MyCompetitionsRouteImport.update({
   id: '/my-competitions',
   path: '/my-competitions',
@@ -40,12 +46,14 @@ export interface FileRoutesByFullPath {
   '/calendar': typeof CalendarRoute
   '/competitions': typeof CompetitionsRoute
   '/my-competitions': typeof MyCompetitionsRoute
+  '/my-gym': typeof MyGymRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
   '/competitions': typeof CompetitionsRoute
   '/my-competitions': typeof MyCompetitionsRoute
+  '/my-gym': typeof MyGymRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,25 @@ export interface FileRoutesById {
   '/calendar': typeof CalendarRoute
   '/competitions': typeof CompetitionsRoute
   '/my-competitions': typeof MyCompetitionsRoute
+  '/my-gym': typeof MyGymRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/calendar' | '/competitions' | '/my-competitions'
+  fullPaths:
+    | '/'
+    | '/calendar'
+    | '/competitions'
+    | '/my-competitions'
+    | '/my-gym'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/calendar' | '/competitions' | '/my-competitions'
-  id: '__root__' | '/' | '/calendar' | '/competitions' | '/my-competitions'
+  to: '/' | '/calendar' | '/competitions' | '/my-competitions' | '/my-gym'
+  id:
+    | '__root__'
+    | '/'
+    | '/calendar'
+    | '/competitions'
+    | '/my-competitions'
+    | '/my-gym'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,10 +87,18 @@ export interface RootRouteChildren {
   CalendarRoute: typeof CalendarRoute
   CompetitionsRoute: typeof CompetitionsRoute
   MyCompetitionsRoute: typeof MyCompetitionsRoute
+  MyGymRoute: typeof MyGymRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/my-gym': {
+      id: '/my-gym'
+      path: '/my-gym'
+      fullPath: '/my-gym'
+      preLoaderRoute: typeof MyGymRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/my-competitions': {
       id: '/my-competitions'
       path: '/my-competitions'
@@ -107,6 +135,7 @@ const rootRouteChildren: RootRouteChildren = {
   CalendarRoute: CalendarRoute,
   CompetitionsRoute: CompetitionsRoute,
   MyCompetitionsRoute: MyCompetitionsRoute,
+  MyGymRoute: MyGymRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
