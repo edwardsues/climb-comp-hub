@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
+import "./index.scss";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
