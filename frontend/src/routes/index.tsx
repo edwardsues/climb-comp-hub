@@ -43,17 +43,7 @@ function Home() {
     return (
         <div className="app-container">
             <div className="main-card-wrapper">
-                <img
-                    src="https://cdn.auth0.com/quantum-assets/dist/latest/logos/auth0/auth0-lockup-en-ondark.png"
-                    alt="Auth0 Logo"
-                    className="auth0-logo"
-                    onError={(e) => {
-                        e.currentTarget.style.display = "none";
-                    }}
-                />
-                <h1 className="main-title">Welcome to Sample0</h1>
-
-                {isAuthenticated ? (
+                {isAuthenticated ?? (
                     <div className="logged-in-section">
                         <div className="logged-in-message">✅ Successfully authenticated!</div>
                         <h2 className="profile-section-title">Your Profile</h2>
@@ -61,11 +51,6 @@ function Home() {
                             <Profile />
                         </div>
                         <LogoutButton />
-                    </div>
-                ) : (
-                    <div className="action-card">
-                        <p className="action-text">Get started by signing in to your account</p>
-                        <LoginButton />
                     </div>
                 )}
             </div>
