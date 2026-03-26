@@ -35,8 +35,14 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: 16px;
+}
 
-    @media (min-width: 768px) {
+@media (min-width: 768px) {
+    .intro {
+        padding: 128px 16px;
+    }
+
+    .competition-cards {
         grid-template-columns: repeat(3, 1fr);
     }
 }
