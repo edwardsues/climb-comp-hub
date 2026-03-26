@@ -1,0 +1,48 @@
+.home-page {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+}
+
+.intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #dbeafe;
+    padding: 64px 16px;
+    text-align: center;
+}
+
+.upcoming-comps,
+.participating-gyms {
+    padding: 0 16px;
+}
+
+.upcoming-comps {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.see-all {
+    align-self: center;
+    border: 1px solid rgba(209, 217, 224, 0.7019607843);
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.competition-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+@media (min-width: 768px) {
+    .intro {
+        padding: 128px 16px;
+    }
+
+    .competition-cards {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
