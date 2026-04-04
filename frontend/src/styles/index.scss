@@ -11,11 +11,21 @@
     background-color: #dbeafe;
     padding: 64px 16px;
     text-align: center;
+    gap: 16px;
+
+    & > * {
+        max-width: 800px;
+        width: 100%;
+    }
 }
 
 .upcoming-comps,
-.participating-gyms {
-    padding: 0 16px;
+.participating-gyms,
+.how-it-works {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
 }
 
 .upcoming-comps {
@@ -24,17 +34,59 @@
     gap: 32px;
 }
 
-.see-all {
+.intro-button {
     align-self: center;
     border: 1px solid rgba(209, 217, 224, 0.7019607843);
     border-radius: 8px;
     font-weight: 600;
+    padding: 16px;
+
+    &.get-started {
+        background-color: white;
+    }
+    &:hover {
+        background-color: #ebebeb;
+    }
 }
 
 .competition-cards {
     display: grid;
     grid-template-columns: 1fr;
     gap: 16px;
+}
+
+h2 {
+    color: black;
+}
+
+.how-it-works {
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.upcoming-comps {
+    padding: 0 16px;
+}
+
+.how-it-works-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.how-it-works-card {
+    background-color: #f5f7f9;
+    border-radius: 8px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 @media (min-width: 768px) {

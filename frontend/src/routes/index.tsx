@@ -33,7 +33,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-    const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+    const { isAuthenticated, getAccessTokenSilently, loginWithRedirect } = useAuth0();
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -46,6 +46,12 @@ function Home() {
             <section className="intro">
                 <h1>Find comps, climb harder, and prove your sends - all in one place.</h1>
                 <h2>ClimbHub is a unified platform for discovering and competing in Ontario bouldering competitions.</h2>
+                <h2>All Ontario competitions in one place - no more hunting.</h2>
+                {!isAuthenticated && (
+                    <button className="intro-button get-started" onClick={() => loginWithRedirect()}>
+                        Get Started
+                    </button>
+                )}
             </section>
 
             <section className="upcoming-comps">
@@ -55,9 +61,30 @@ function Home() {
                         <CompetitionCard key={comp.name} {...comp} />
                     ))}
                 </ul>
-                <Link to="/competitions" className="see-all">
+                <Link to="/competitions" className="intro-button">
                     See all
                 </Link>
+            </section>
+
+            <section className="how-it-works">
+                <h1>How it works</h1>
+                <div className="how-it-works-grid">
+                    <div className="how-it-works-card">
+                        <h2>Discover & Join</h2>
+                        <p>Browse upcoming competitions across Ontario. Register and see event details all in one place.</p>
+                    </div>
+                    <div className="how-it-works-card">
+                        <h2>Track Your Sends</h2>
+                        <p>
+                            Log climbs digitally during competitions - no more paper cards. Submit results and track your
+                            progress.
+                        </p>
+                    </div>
+                    <div className="how-it-works-card">
+                        <h2>Host & Manage</h2>
+                        <p>Create and manage competitions, handle participants, and view results seamlessly.</p>
+                    </div>
+                </div>
             </section>
 
             <section className="participating-gyms">
