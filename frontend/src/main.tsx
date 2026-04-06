@@ -4,12 +4,15 @@ import "./index.scss";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const router = createRouter({
     routeTree,
     defaultPreload: "intent",
     scrollRestoration: true,
 });
+
+const queryClient = new QueryClient();
 
 declare module "@tanstack/react-router" {
     interface Register {
@@ -28,7 +31,9 @@ createRoot(document.getElementById("root")!).render(
             }}
             cacheLocation="localstorage"
         >
-            <RouterProvider router={router} />
+            <QueryClientProvider client={queryClient}>
+                <RouterProvider router={router} />
+            </QueryClientProvider>
         </Auth0Provider>
     </StrictMode>,
 );
