@@ -48,7 +48,7 @@ function Home() {
                 <h2>ClimbHub is a unified platform for discovering and competing in Ontario bouldering competitions.</h2>
                 <h2>All Ontario competitions in one place - no more hunting.</h2>
                 {!isAuthenticated && (
-                    <button className="intro-button get-started" onClick={() => loginWithRedirect()}>
+                    <button className="btn-primary" onClick={() => loginWithRedirect()}>
                         Get Started
                     </button>
                 )}
@@ -61,7 +61,7 @@ function Home() {
                         <CompetitionCard key={comp.name} {...comp} />
                     ))}
                 </ul>
-                <Link to="/competitions" className="intro-button">
+                <Link to="/competitions" className="btn-primary">
                     See all
                 </Link>
             </section>

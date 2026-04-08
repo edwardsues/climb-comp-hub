@@ -62,7 +62,13 @@ def get_or_create_user():
             role='climber'
         )
         db.session.add(user)
-        db.session.commit()
+    else:
+        if not user.email and g.current_user.get('email'):
+            user.email = g.current_user.get('email')
+        if not user.name and g.current_user.get('name'):
+            user.name = g.current_user.get('name')
+
+    db.session.commit()
     return user
 
     

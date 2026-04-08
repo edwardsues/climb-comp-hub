@@ -7,6 +7,19 @@
     flex-wrap: wrap;
     background-color: white;
     z-index: 100;
+
+    a {
+        text-decoration: none;
+        padding: 16px;
+
+        &:visited {
+            color: black;
+        }
+
+        &:hover {
+            background-color: #ebebeb;
+        }
+    }
 }
 
 .navbar-top {
@@ -15,19 +28,6 @@
     align-items: center;
     padding: 0 16px;
     width: 100%;
-}
-
-a {
-    text-decoration: none;
-    padding: 16px;
-
-    &:visited {
-        color: black;
-    }
-
-    &:hover {
-        background-color: #ebebeb;
-    }
 }
 
 button {

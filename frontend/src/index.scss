@@ -22,3 +22,24 @@ h3 {
 ul {
     padding: 0;
 }
+
+.btn-primary {
+    background-color: #222;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 24px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+
+    &:hover {
+        background-color: #444;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
