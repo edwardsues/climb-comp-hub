@@ -32,6 +32,8 @@ def update_me():
         user.name = data["name"]
     if "dob" in data:
         user.dob = datetime.strptime(data["dob"], "%Y-%m-%d").date()
+    if "email" in data:
+        user.email = data["email"]
 
     db.session.commit()
     return jsonify({

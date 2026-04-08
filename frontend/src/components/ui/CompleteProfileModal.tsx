@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 import "../../styles/modal.scss";
 
 type Props = {
@@ -9,15 +10,17 @@ type Props = {
 type ProfileUpdate = {
     name: string;
     dob: string;
+    email: string | undefined;
 };
 
 function CompleteProfileModal({ onComplete }: Props) {
     const [name, setName] = useState("");
     const [dob, setDob] = useState("");
+    const { user, getAccessTokenSilently } = useAuth0();
 
     const mutation = useMutation({
         mutationFn: async (data: ProfileUpdate) => {
-            const token = localStorage.getItem("access_token");
+            const token = await getAccessTokenSilently();
             const res = await fetch("http://localhost:5000/api/users/me", {
                 method: "PATCH",
                 headers: {
@@ -43,7 +46,7 @@ function CompleteProfileModal({ onComplete }: Props) {
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
-                        mutation.mutate({ name, dob });
+                        mutation.mutate({ name, dob, email: user?.email });
                     }}
                 >
                     <label htmlFor="name">Name</label>
